@@ -5,6 +5,7 @@ import cn.tyust.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,13 +16,20 @@ public class UserController {
     UserService userService;
 
     @RequestMapping("/login")
-    public String login(String name, String pwd, HttpSession session) {
+    @ResponseBody
+    public boolean login(String name, String pwd, HttpSession session) {
         User user = userService.login(name, pwd);
         if (user == null) {
-            return "redirect:/login.html";
+            return false;
         }
-        session.setAttribute("loginUser", user);
+        session.setAttribute("user", user);
         System.out.println("登录成功，用户-->"+user);
-        return "redirect:/main.html";
+        return true;
+    }
+
+    @RequestMapping("/view")
+    @ResponseBody
+    public User view(HttpSession session){
+        return (User) session.getAttribute("user");
     }
 }
