@@ -4,7 +4,9 @@ import cn.tyust.pojo.User;
 import cn.tyust.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -17,8 +19,8 @@ public class UserController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public boolean login(String name, String pwd, HttpSession session) {
-        User user = userService.login(name, pwd);
+    public boolean login(@RequestBody User u, HttpSession session) {
+        User user = userService.login(u.getName(), u.getPwd());
         if (user == null) {
             return false;
         }
